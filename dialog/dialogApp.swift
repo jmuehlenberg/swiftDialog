@@ -217,6 +217,11 @@ struct dialogApp: App {
 
     init () {
 
+        // AppKit treats trailing command line values as documents to open. Without this,
+        // a value as last argument (e.g. --message "text") can stop launch before
+        // applicationDidFinishLaunching, leaving a running process with no window.
+        UserDefaults.standard.register(defaults: ["NSTreatUnknownArgumentsAsOpen": "NO"])
+
         appvars.debugMode = CLOptionPresent(optionName: appArguments.debug)
 
         if CommandLine.arguments.count <= 1 {
